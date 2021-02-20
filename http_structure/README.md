@@ -50,7 +50,7 @@ Basic認証はサーバ側からユーザ名とパスワードをクライアン
 <img src="basic_authorization3.png" width="500">  
 
 
-最初にWebサーバにアクセスした際の応答をキャプチャした結果は以下のとおりである。
+最初にWebサーバにアクセスした際の応答をキャプチャした結果は以下のとおりである。  
 ■ 最初の応答（Webサーバ → クライアント）
 ```
 HTTP/1.1 401 Unauthorized\r\n
@@ -170,7 +170,7 @@ function http_digest_parse($txt)
     return $needed_parts ? false : $data;
 }
 ```
-ブラウザでこのサーバにアクセスすると、Basic認証と同様にブラウザの認証ポップアップが表示され、ユーザ名とパスワードが表示される。今回は正しいユーザ名とパスワードを登録していないため、認証自体には失敗する。まず、最初にサーバにアクセスしたときの応答通信の内容は以下のとおりである。
+ブラウザでこのサーバにアクセスすると、Basic認証と同様にブラウザの認証ポップアップが表示され、ユーザ名とパスワードが表示される。今回は正しいユーザ名とパスワードを登録していないため、認証自体には失敗する。まず、最初にサーバにアクセスしたときの応答通信の内容は以下のとおりである。  
 ■ 最初の応答（Webサーバ → クライアント）
 ```
 HTTP/1.1 401 Unauthorized\r\n
@@ -192,7 +192,7 @@ Connection: Keep-Alive\r\n
 Content-Type: text/html; charset=UTF-8\r\n
 ```
 WWW-AuthenticateでDigest認証を要求している。さらに、ここでrealm,qopなどのパラメータが設定されている。これらの詳細は[こちら](http://www.ric.co.jp/book/pdfs/3-13.pdf)を参照。
-クライアントから認証情報を送るチャレンジの通信内容は以下の通り。
+クライアントから認証情報を送るチャレンジの通信内容は以下の通り。  
 ■ チャレンジ（クライアント → Webサーバ）
 ```
 GET / HTTP/1.1\r\n
@@ -216,8 +216,10 @@ Accept-Language: ja\r\n
 Authorizationにはusernameなどが格納されていることがわかる。responseパラメータが格納されているが、これが認証情報をもとに生成した暗号文である。この暗号文はmd5アルゴリズムを使用し、以下の式で計算される。
 > A1 = ユーザ名 ":" realm ":" パスワード   
 > A2 = HTTPのメソッド ":" コンテンツのURI  
- cnonce = MD5( MD5(A1) ":" nonce ":" nc ":" cnonce ":" qop ":" MD5(A2) )  
- 
+ cnonce = MD5( MD5(A1) ":" nonce ":" nc ":" cnonce ":" qop ":" MD5(A2) )    
+
+ここで、nounceおよびcnounceはサーバ側でランダムに生成した値である。したがって、生成されるresponseの文字列もランダムなものとなる。このresponseがサーバ側で計算したものと合致した時、認証に成功する。
+
 
 ## Cookie構造
 近日整理予定
